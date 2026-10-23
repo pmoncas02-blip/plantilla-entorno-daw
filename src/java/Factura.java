@@ -3,6 +3,7 @@
  * Programa de ejemplo proporcionado por el profesor (Práctica 2 · Tema 2).
  * NO tienes que modificarlo: solo compilarlo, empaquetarlo en un .jar y ejecutarlo.
  */
+
 public class Factura {
 
     static final double IVA = 0.21;

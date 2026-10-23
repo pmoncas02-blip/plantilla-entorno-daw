@@ -16,36 +16,39 @@
 Resultado de `java -version` y `node -v` **antes** de instalar nada:
 
 ```
-pega aquí
+java: command not found
+node: command not found
 ```
 
 ¿Por qué crees que aparece ese mensaje? (relaciónalo con la diapositiva «Problemas habituales del entorno»)
 
-> 
+> Porque no los tenemos instalados.
 
 ### 1.2. Después de la 1.ª reconstrucción (paso 5)
 
 Resultado de `java -version`, `node -v` y `jupyter lab --version` **después**:
 
 ```
-pega aquí
+java: version 27
+node.js: v24.22.1
+JupyterLab 4.6.4
 ```
 
 ¿Qué líneas nuevas han aparecido en `devcontainer.json`? Explica con tus palabras qué hace cada una:
 
-> 
+> Se añadió el boque de ```features``` con java node.js y python
 
 ### 1.3. Comparativa de los dos IDE (paso 6)
 
 |                                         | Editor de GitHub Codespaces | JupyterLab |
 |-----------------------------------------|-----------------------------|------------|
-| ¿Libre o propietario?                   |                             |            |
-| Licencia / empresa o comunidad          |                             |            |
-| ¿Tiene coste? ¿Con qué límites?         |                             |            |
-| ¿Se puede usar fuera de GitHub?         |                             |            |
-| Lo que más me ha gustado                |                             |            |
-| Lo que menos me ha gustado              |                             |            |
-| ¿Para qué tipo de trabajo lo elegiría?  |                             |            |
+| ¿Libre o propietario?                   |                Propietario             |         Libre   |
+| Licencia / empresa o comunidad          |               Microsoft (GitHub)              |       BSD 3-Clause / Proyecto Jupyter     |
+| ¿Tiene coste? ¿Con qué límites?         |                  Sí, con horas gratuitas limitadas           |     Gratuito       |
+| ¿Se puede usar fuera de GitHub?         |                    No         | Sí            |
+| Lo que más me ha gustado                |                Integración con Git y VS Code             |      No lo hemos podido probar      |
+| Lo que menos me ha gustado              |              Tiene límite de uso gratuito               |       No va     |
+| ¿Para qué tipo de trabajo lo elegiría?  |                  Desarrollo de aplicaciones           |       No lo sé     |
 
 ---
 
@@ -53,32 +56,37 @@ pega aquí
 
 | Extensión | ¿Para qué sirve? | ¿Qué cambió al instalarla? | ¿La mantengo? ¿Por qué? |
 |-----------|------------------|----------------------------|-------------------------|
-| Extension Pack for Java |   |   |   |
-| Code Spell Checker      |   |   |   |
+| Extension Pack for Java | Añade soporte completo para Java  | Aparecieron los botones Run y Debug  |  Sí, porque facilita programar en Java |
+| Code Spell Checker      |  Corrige errores ortográficos |  Marcaba muchas palabras en español como incorrectas |   |
 
 ¿Qué diferencia hay entre instalar una extensión **solo desde el panel** y añadirla **también a `devcontainer.json`**?
 
-> 
+> Instalarla solo desde el panel hace que únicamente esté disponible en mi Codespace actual.
 
 ---
 
 ## 3. Personalización y automatización (CE 2.c)
 
-- **Tema visual elegido** (paso 10) y por qué:
-- **Ajuste del proyecto** (paso 10). ¿Qué archivo se ha creado y qué contiene?
+- **Tema visual elegido** (paso 10) y por qué: el predeterminado porque estaba ya acostumbrado a él.
+- **Ajuste del proyecto** (paso 10). ¿Qué archivo se ha creado y qué contiene? .vscode/settings.json
 
 ```
-pega aquí el contenido de .vscode/settings.json
+{
+    "editor.formatOnSave": true
+}
 ```
 
-- **Atajo de teclado** (paso 11). ¿Qué acción, qué combinación y para qué te sirve?
-- **Snippet** (paso 12). ¿Qué escribes y qué aparece?
-- **Automatización al crear el entorno** (paso 14). ¿Qué hace `postCreateCommand` y qué archivos/carpetas han aparecido después de reconstruir?
-- **Tareas** (paso 13). ¿Cuántas tareas hay en `tasks.json` y qué hace cada una?
+- **Atajo de teclado** (paso 11). ¿Qué acción, qué combinación y para qué te sirve? ctrl + alt + r y sirve para hacer rebuild
+- **Snippet** (paso 12). ¿Qué escribes y qué aparece? escribo "cabecera" y aparece mi nombre, la fecha y el módulo.
+- **Automatización al crear el entorno** (paso 14). ¿Qué hace `postCreateCommand` y qué archivos/carpetas han aparecido después de reconstruir? Ejecuta automáticamente npm install cuando se crea el entorno para descargar las dependencias del proyecto.
+- **Tareas** (paso 13). ¿Cuántas tareas hay en `tasks.json` y qué hace cada una? 
+Compilar, empaquetar y ejecutar Java.
+Compilar y ejecutar TypeScript.
+Build completo, que ejecuta las dos anteriores.
 
 ¿Qué parte de toda esta configuración es **personal** (solo para ti) y qué parte es **del proyecto** (la recibe cualquiera que abra el repositorio)?
 
-> 
+> Personal: Tema y Atajos de teclado. Proyecto: settings.json snippets tasks.json devcontainer.json
 
 ---
 
@@ -87,13 +95,44 @@ pega aquí el contenido de .vscode/settings.json
 Salida completa de la tarea **Build completo** (paso 15):
 
 ```
-pega aquí
+ *  Ejecutando tarea: mkdir -p build/java && javac -d build/java src/java/Factura.java && jar --create --file build/factura.jar --main-class Factura -C build/java . && java -jar build/factura.jar 
+
+=== FACTURA generada con Java 21 ===
+Dominio web anual              12.00 EUR
+Alojamiento web                59.90 EUR
+Logotipo corporativo          150.00 EUR
+-----------------------------------------
+Base imponible                221.90 EUR
+IVA (21 %)                     46.60 EUR
+TOTAL                         268.50 EUR
+ *  Las tareas reutilizarán el terminal, presione cualquier tecla para cerrarlo. 
+
+ *  Ejecutando tarea: npm run build && npm start 
+
+
+> plantilla-entorno-daw@1.0.0 build
+> tsc
+
+
+> plantilla-entorno-daw@1.0.0 start
+> node dist/factura.js
+
+=== FACTURA generada con Node.js v24.22.1 ===
+Dominio web anual              12.00 EUR
+Alojamiento web                59.90 EUR
+Logotipo corporativo          150.00 EUR
+-----------------------------------------
+Base imponible                221.90 EUR
+IVA (21 %)                     46.60 EUR
+TOTAL                         268.50 EUR
+ *  Las tareas reutilizarán el terminal, presione cualquier tecla para cerrarlo. 
+
 ```
 
 | Lenguaje | Archivo fuente | Herramienta que lo traduce | Archivo generado | Cómo se ejecuta |
 |----------|----------------|----------------------------|------------------|-----------------|
-| Java       | `src/java/Factura.java` |   |   |   |
-| TypeScript | `src/ts/factura.ts`     |   |   |   |
+| Java       | `src/java/Factura.java` |  src/java/Factura.java | javac  |  build/factura.jar |
+| TypeScript | `src/ts/factura.ts`     |  src/ts/factura.ts |  tsc |  dist/factura.js |
 
 **Opcional:** ¿has podido ejecutar los mismos archivos desde JupyterLab (paso 19)? ¿Por qué funciona en los dos IDE sin instalar nada más?
 
@@ -120,19 +159,40 @@ pega aquí
 Resultado de `npm outdated` (paso 17):
 
 ```
-pega aquí
+Package         Current    Wanted   Latest  Location                    Depended by
+@types/lodash  4.14.202  4.14.202  4.17.27  node_modules/@types/lodash  plantilla-entorno-daw
+@types/node    20.11.30  20.11.30   26.6.5  node_modules/@types/node    plantilla-entorno-daw
+lodash          4.17.20   4.17.20   4.18.1  node_modules/lodash         plantilla-entorno-daw
+typescript        5.4.5     5.4.5    7.0.2  node_modules/typescript     plantilla-entorno-daw
 ```
 
 Resultado de `npm audit` **antes** de actualizar lodash (solo el resumen final):
 
 ```
-pega aquí
+# npm audit report
+
+lodash  <=4.17.23
+Severity: high
+Command Injection in lodash - https://github.com/advisories/GHSA-35jh-r3h4-6jhm
+Regular Expression Denial of Service (ReDoS) in lodash - https://github.com/advisories/GHSA-29mw-wpgm-hmr9
+lodash vulnerable to Code Injection via `_.template` imports key names - https://github.com/advisories/GHSA-r5fr-rjxr-66jc
+lodash vulnerable to Prototype Pollution via array path bypass in `_.unset` and `_.omit` - https://github.com/advisories/GHSA-f23m-r3pf-42rh
+Lodash has Prototype Pollution Vulnerability in `_.unset` and `_.omit` functions - https://github.com/advisories/GHSA-xxjr-mmjv-4gpg
+fix available via `npm audit fix --force`
+Will install lodash@4.18.1, which is outside the stated dependency range
+node_modules/lodash
+
+1 high severity vulnerability
+
+To address all issues, run:
+  npm audit fix --force
 ```
 
 Resultado de `npm audit` **después**:
 
 ```
-pega aquí
+@pmoncas02-blip ➜ /workspaces/plantilla-entorno-daw (main) $ npm audit
+found 0 vulnerabilities
 ```
 
 **Mi política de actualizaciones**: si este entorno lo usara un equipo de 5 personas durante todo el curso, ¿qué dejarías en automático y qué fijarías a mano? Justifícalo.
